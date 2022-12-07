@@ -10,9 +10,9 @@ source("../source/a4-helpers.R")
 source("../source/analysis.R")
 ```
 
-## Abstract
+## Abstract 
 
-[TODO: Include a short abstract (about 50 words)]
+Through evaluating data surrounding prison populations in the United States, we are able to gain a better understanding on the disparities between races in prison. By using tools such as dplyr and ggplot2 I will investigate and visualize the data to investigate these disparities.
 
 ## Introduction
 
@@ -22,28 +22,34 @@ Mass incarceration has existed since slavery within the United States, and has y
 
 With over `r number_incarcerated` people currently incarcerated, `r highest_county` holds the highest incarceration population as of 2018. Of the `r number_incarcerated` people `r white_incarcerated` are white and `r black_incarcerated` are black. This is concerning as the difference in population cannot be considered coincidental due to the magnitude of the difference of `r white_black_difference`. The difference can most likely be attributed to unfair and unjust policing in black communities, and criminalizing black citizens whilst not doing the same to white citizens. This ultimately does a great number of harms on the black community as a whole as it creates and enforces stereotypes, hurts the quality of life, and causes irreparable generational harm.
 
-## Growth of the U.S. Prison Population 
+## Growth of the U.S. Prison Population
 
-``` {r plot_jail_pop_for_us(), echo=FALSE}
+```{r plot_jail_pop_for_us(), echo=FALSE}
 plot_jail_pop_for_us()
 ```
 
-The chart above depicts the trend of incarceration. As seen in the chart, there seemed to be a steady increase in prison population from 1950 through 2005 and the population has stayed at around 800,000 since then. This begs the question what caused this growth in jail population? According to historical and data evidence, the racist infrastructure that the United States is built on has led to the mass incarceration of citizens who have been unfairly or wrongly convicted of a crime. 
+The chart above depicts the trend of incarceration. As seen in the chart, there seemed to be a steady increase in prison population from 1950 through 2005 and the population has stayed at around 800,000 since then. This begs the question what caused this growth in jail population? According to historical and data evidence, the racist infrastructure that the United States is built on has led to the mass incarceration of citizens who have been unfairly or wrongly convicted of a crime.
 
-## Growth of Prison Population by State 
+## Growth of Prison Population by State
 
-``` {r plot_jail_pop_by_states(c("AL", "CA", "WA", "FL")), echo=FALSE}
-plot_jail_pop_by_states(c("AL", "CA", "WA", "FL"))
+```{r plot_jail_pop_by_states(c("CA", "WA")), echo=FALSE}
+plot_jail_pop_by_states(c("CA", "WA"))
 ```
 
-
+The chart above shows the rate of prison grow in California and Washington to compare the differences between the two. This answers the question "What is the difference in population size between states?". As seen in the chart it is seen that California has had a much greater population size in comparison to Washington. However in 2005, Washington saw a spike in the total prison population, surpassing California. As the years went on, however, California saw a slow increase while Washington decreased overall in size. Although not depicted here, comparing this data to the rest of the states will allow for viewers to understand which states hold the largest prison population and call them to question why this may be.
 
 ##Growth of White and Black Prison Populations
 
-``` {r plot_black_white_jail_pop(), echo=FALSE}
+```{r plot_black_white_jail_pop(), echo=FALSE}
 plot_black_white_jail_pop()
 ```
 
 The chart above shows the difference in growth rate of white and black prison populations. With this chart answers the questions "Is there a difference between races within prison populations?" It is evident through this chart alone that there is a great disparity between black prison populations and white prison populations. From 2010 to 2020, there seemed to be a decrease in white prisoners while the black population saw an increase. This is alarming as there are more white citizens in the nation than black citizens, yet there are still more black prisoners than white. It is important to address the underlying issues that may be causing this gap and work to solve any unfair and oppressive forces behind it.
 
-## Population Incarcerated by State 
+## Population Incarcerated by State
+
+```{r map_graph, echo=FALSE}
+map_graph 
+```
+
+This final chart is a chloropleth map that compares the amount of prisoners in each states using different colors. Through this map we are able to investigate the question "What are some patterns in prison population density across the United States?" As we go across the map we can see that states like California are much more red than states like Alaska, indicating that there are factors that differ between states that cause this difference in population. We are also able to make inferences from this map such as how a states education system or legal laws regarding drugs impacts its incarceration rates. 

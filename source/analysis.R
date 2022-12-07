@@ -74,27 +74,29 @@ plot_jail_pop_for_us <- function()  {
 # Growth of Prison Population by State 
 
 #This function returns a data frame of jail populations by state
+
 get_jail_pop_by_states <- function(states){
   state_jail <- incarceration_df %>% 
-    select(state, year, total_jail_pop) %>% 
-    drop_na()
+    drop_na() %>% 
+    select(state, year, total_jail_pop) 
   states_jail_pop <- state_jail %>% 
     filter(state %in% states) 
-  return(states_jail_pop)
+  return(states_jail_pop) 
 }
 
-state_data <- get_jail_pop_by_states(c("AL", "CA", "WA", "FL"))
+state_data <- get_jail_pop_by_states(c("CA", "WA")) 
 
 #This function returns a line graph plot of the change in jail populations by state 
-plot_jail_pop_by_states <- function(states){
-  states_plot <- ggplot(get_jail_pop_by_states(states)) +
-    geom_line(aes(x = year, y = total_jail_pop, color = State)) + 
-    labs(title = "Increase of Jail Population in U.S. States (1970-2018)",
-       x = "Year",
-       y = "Total Jail Population")
-  return(plot_jail_pop_by_states(states))
+plot_jail_pop_by_states <- function(states) {
+  line_plot <- ggplot(get_jail_pop_by_states(states), aes(x=year, y=total_jail_pop, color = state))+
+      stat_summary(fun = "mean", geom = "line") + xlab("Year") +
+      ylab("Total Jail Population") +
+        ggtitle("Increase in Jail Population in U.S. States (1970-2018)")
+      return(line_plot)
 }
-plot_jail_pop_by_states(c("AL", "CA", "WA", "FL"))
+
+plot_jail_pop_by_states(c("CA", "WA"))
+
 #----------------------------------------------------------------------------#
 
 ## Section 5  ---- 
@@ -126,6 +128,8 @@ plot_black_white_jail_pop <- function(){
   return(bw_jail_plot)
 }
 
+plot_black_white_jail_pop()
+
 #----------------------------------------------------------------------------#
 
 ## Section 6  ---- 
@@ -133,31 +137,53 @@ plot_black_white_jail_pop <- function(){
 # Population Incarcerated by State
 
 #This function returns a data frame of total jail populations by state in 2018
-state_jail_pop <- function() {
+# state_jail_pop <- function() {
   state_jail_pop_2018 <- incarceration_df %>% 
     select(year, total_jail_pop, state) %>% 
     drop_na() %>% 
-    group_by(state) %>%
-    filter(year == max(year)) %>% 
-    summarize(total_jail_pop = sum(total_jail_pop)) %>% 
-    return(state_jail_pop_2018)   
-}
+    filter(year == "2018") %>% 
+    group_by(state) %>% 
+    summarize(state, total_jail_pop)
+  state_jail_pop_2018 <- aggregate(total_jail_pop~.,state_jail_pop_2018,FUN=sum)
+  # return(state_jail_pop_2018)   
 
-view(state_jail_pop())
+
+#Creates a data set that works with map
+state_df <- state_jail_pop()
+
+state_name <- c("alaska", "alabama", "arkansas", "arizona", "california", "colorado",
+                "district of columbia", "florida", "georgia", "iowa", "idaho", "illinois",
+                "indiana", "kansas", "kentucky", "louisiana", "massachusetts", "maryland", 
+                "maine", "michigan", "minnesota", "missouri", "mississippi", "montana", 
+                "north carolina", "north dakota", "nebraska", "new hampshire", "new jersey", 
+                "new mexico", "nevada", "new york", "ohio", "oklahoma", "oregon", "pennsylvania",
+                "south carolina", "south dakota", "tennessee", "texas", "utah", "virginia",
+                "washington", "wisconsin", "west virginia", "wyoming")
+
+state_df <- subset(state_df, select = -c(state))
+state_df$state = state_name
 
 #This function returns a chloropleth map of total jail populations by state in 2018
-state_jail_pop <- incarceration_df %>% 
-  select(state, total_jail_pop, year) %>% 
-  state.name[match(state,state.abb)] 
-
-
-view(state_shape)
-
+state_shape <- map_data("state")
 ggplot(state_shape) +
   geom_polygon(
-    mapping = aes(x = )
+    mapping = aes(x = long, y = lat, group = group),
+    color = "white", size = 0.3) + coord_map() 
+
+state_shape <- map_data("state") %>% 
+  rename(state = region) %>% 
+  left_join(state_data, by = "state") 
+
+map_graph <- ggplot(state_shape) +
+  geom_polygon(
+    mapping = aes(x = long, y = lat, group = group, fill = total_jail_pop),
+    color = "white", size = 0.3) +
+  coord_map() +
+  scale_fill_continuous(low = "Blue", high = "Red") + 
+  labs(fill = "Jail Population", title = "Jail Population by State", 
+       subtitle = "2018")
   )
-view(state_shape)
+
 #----------------------------------------------------------------------------#
 
 ## Load data frame ---- 
